@@ -18,3 +18,17 @@ class EstadosMaquina():
         self.__funcaoAoExecutar  = funcaoAoExecutar
         self.__funcaoAoSair      = funcaoAoSair
 
+    """
+    Funcao que deve ser executada ao 
+    """
+    @property
+    def funcaoAoEntrar(self):
+        return self.__funcaoAoEntrar
+
+    @property
+    def funcaoAoExecutar(self):
+        return self.__funcaoAoExecutar
+
+    @property
+    def funcaoAoSair(self):
+        return self.__funcaoAoSair
