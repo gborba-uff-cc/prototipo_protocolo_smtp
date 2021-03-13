@@ -1,0 +1,6 @@
+# Pastas
+__pycache__/
+.venv/
+.vscode/
+
+# Arquivos
