@@ -1,6 +1,12 @@
 class MaquinaEstados():
     def __init__(self, estadoInicial, estadoFinal):
-        pass
+        self.__maquinaValidada = False
+        self.__estadoInicial = estadoInicial
+        self.__estadoAtual = estadoInicial
+        self.__estadoFinal = estadoFinal
+        self.__estados = {}
+        self.__transicoes = {}
+
 
 class EstadosMaquina():
     def __init__(self,
@@ -8,4 +14,7 @@ class EstadosMaquina():
         funcaoAoExecutar    = lambda *args, **kwargs : 0,
         funcaoAoSair        = lambda *args, **kwargs : 0
     ):
-        pass
+        self.__funcaoAoEntrar    = funcaoAoEntrar
+        self.__funcaoAoExecutar  = funcaoAoExecutar
+        self.__funcaoAoSair      = funcaoAoSair
+
