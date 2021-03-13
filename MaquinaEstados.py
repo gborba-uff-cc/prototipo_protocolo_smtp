@@ -1,3 +1,7 @@
+# usando __identificador  para privado
+# usando  _identificador  para protegido
+# usando   identificador  para publico
+
 class MaquinaEstados():
     def __init__(self, estadoInicial, estadoFinal):
         self.__maquinaValidada = False
@@ -6,6 +10,20 @@ class MaquinaEstados():
         self.__estadoFinal = estadoFinal
         self.__estados = {}
         self.__transicoes = {}
+
+    def adicionaEstado(self, identificadorEstado, estadoMaquina):
+        """
+        Define um par, identificador e estado a ser identificado, dentro da maquina.
+        """
+        self.__estados[identificadorEstado] = estadoMaquina
+
+    def adicionaTrasicao(self, estadoOrigem, sinal, estadoDestino):
+        """
+        Define uma transição entre dois estados juntamente com o sinal/gatilho 
+        que ativa essa transição, aceita apenas um sinal por transição.
+        """
+        chave = self.__chaveTransicoes(estadoOrigem, sinal)
+        self.__transicoes[chave] = estadoDestino
 
 
 class EstadosMaquina():
