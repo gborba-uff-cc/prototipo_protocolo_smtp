@@ -63,6 +63,12 @@ class MaquinaEstados():
         self.__estados[novoEstado].funcaoAoEntrar(*args, **kwargs)
         self.__estadoAtual = novoEstado
 
+    def reiniciaMaquina(self):
+        """
+        Coloca a maquina no o estado inicial (definido na construcao do objeto)
+        """
+        self.__estadoAtual = self.__estadoInicial
+
 class EstadosMaquina():
     def __init__(self,
         funcaoAoEntrar      = lambda *args, **kwargs : 0,
