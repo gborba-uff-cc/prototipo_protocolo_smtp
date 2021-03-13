@@ -49,6 +49,18 @@ class MaquinaEstados():
                 .format(v))
         self.__maquinaValidada = True
 
+    def executa(self, *args, **kwargs):
+        """
+        Começa a execução da maquina e passa parametros que podem ser usados 
+        pelas callbacks dos estados.
+        A execução parará após a máquina entrar no estado final.
+        """
+        if not self.__maquinaValidada:
+            self.confereMaquina()
+        self.__estados[self.__estadoAtual].funcaoAoEntrar(*args, **kwargs)
+        while (self.__estadoAtual != self.__estadoFinal):
+            self.__estados[self.__estadoAtual].funcaoAoExecutar(*args, **kwargs)
+
     def _processaSinal(self, sinal: str, *args, **kwargs):
         """
         Manda um sinal para a maquina.
