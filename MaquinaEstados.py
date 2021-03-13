@@ -32,6 +32,15 @@ class EstadosMaquina():
         funcaoAoExecutar    = lambda *args, **kwargs : 0,
         funcaoAoSair        = lambda *args, **kwargs : 0
     ):
+        """
+        OBS.: A maneira de passar parametros para as callbacks dos estados é 
+        por parametros e parametros nomeados,
+        ex. de parametro nomeado: funcao(nome=valor)
+        e dentro da cada função pegar o par nome=valor usando, 
+        ex.: nome = kwargs.get('nome', valor_caso_nome_nao_exista) 
+        onde a variavel nome conterá o valor passado como parametro nomeado ou 
+        o valor para caso o parametro não tenha sido passado.
+        """
         self.__funcaoAoEntrar    = funcaoAoEntrar
         self.__funcaoAoExecutar  = funcaoAoExecutar
         self.__funcaoAoSair      = funcaoAoSair
