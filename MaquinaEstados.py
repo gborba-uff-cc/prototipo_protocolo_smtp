@@ -81,6 +81,9 @@ class MaquinaEstados():
         """
         self.__estadoAtual = self.__estadoInicial
 
+    def __chaveTransicoes(self, estado, sinal) -> str:
+        return '{}:|:{}'.format(estado, sinal)
+
 class EstadosMaquina():
     def __init__(self,
         funcaoAoEntrar      = lambda *args, **kwargs : 0,
