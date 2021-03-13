@@ -25,6 +25,30 @@ class MaquinaEstados():
         chave = self.__chaveTransicoes(estadoOrigem, sinal)
         self.__transicoes[chave] = estadoDestino
 
+    def confereMaquina(self):
+        """
+        Confere certas condições para minimizar problemas durante a execução da 
+        máquina:
+        - Confere se cada trasicao realmente leva a um estado
+        - Confere se o estado inicial realmente existe
+        - Confere se o estado final realmente existe
+        """
+        estados = self.__estados.keys()
+        valores = self.__transicoes.values()
+        if self.__estadoInicial not in estados:
+            raise KeyError('O estado inicial {} não é um estado dessa maquina'
+            .format(self.__estadoInicial))
+        else:
+            self.__estadoAtual = self.__estadoInicial
+        if self.__estadoFinal not in estados:
+            raise KeyError('O estado final {} não é um estado dessa maquina'
+            .format(self.__estadoFinal))
+        for v in valores:
+            if v not in estados:
+                raise KeyError('transicao ao estado {0} não é possível porque {0} não é um estado dessa maquina.'
+                .format(v))
+        self.__maquinaValidada = True
+
     def _processaSinal(self, sinal: str, *args, **kwargs):
         """
         Manda um sinal para a maquina.
