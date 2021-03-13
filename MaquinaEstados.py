@@ -117,3 +117,39 @@ class EstadosMaquina():
     @property
     def funcaoAoSair(self):
         return self.__funcaoAoSair
+
+# ==============================================================================
+# exemplo de uso
+if __name__ == '__main__':
+    def processaE1(*args, **kwargs):
+        print(kwargs.get('a','não existe'),kwargs.get('b', 'não existe'))
+        kwargs['b']=777
+        contador._processaSinal('+')
+
+    def processaE2(*args, **kwargs):
+        print(kwargs.get('a','não existe'),kwargs.get('b', 'não existe'))
+        kwargs.get('MAQUINA_ESTADOS')._processaSinal('+')
+
+    contador = MaquinaEstados(0, 3)
+    contador.adicionaEstado(0, EstadosMaquina(
+        lambda *args, **kwargs: print('entrou e0'),
+        lambda *args, **kwargs: contador._processaSinal('+'),
+        lambda *args, **kwargs: print('saiu e0')
+    ))
+    contador.adicionaEstado(1, EstadosMaquina(
+        lambda *args, **kwargs: print('entrou e1'),
+        processaE1,
+        lambda *args, **kwargs: print('saiu e1')
+    ))
+    contador.adicionaEstado(2, EstadosMaquina(
+        lambda *args, **kwargs: print('entrou e2'),
+        processaE2,
+        lambda *args, **kwargs: print('saiu e2')
+    ))
+    contador.adicionaEstado(3, EstadosMaquina())
+    contador.adicionaTrasicao(0, '+', 1)
+    contador.adicionaTrasicao(1, '+', 2)
+    contador.adicionaTrasicao(2, '+', 3)
+    contador.confereMaquina()
+    contador.executa(1,b=2,MAQUINA_ESTADOS=contador)
+    contador.reiniciaMaquina()
