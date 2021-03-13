@@ -25,6 +25,19 @@ class MaquinaEstados():
         chave = self.__chaveTransicoes(estadoOrigem, sinal)
         self.__transicoes[chave] = estadoDestino
 
+    def _processaSinal(self, sinal: str, *args, **kwargs):
+        """
+        Manda um sinal para a maquina.
+        O sinal será processado pela maquina para saber qual transicao ativar, 
+        caso o sinal não leve a uma transicao a maquina mantem o estado atual.
+        """
+        chave = self.__chaveTransicoes(self.__estadoAtual, sinal)
+        novoEstado = self.__transicoes.get(chave)
+        if novoEstado is None:
+            return
+        self.__estados[self.__estadoAtual].funcaoAoSair(*args, **kwargs)
+        self.__estados[novoEstado].funcaoAoEntrar(*args, **kwargs)
+        self.__estadoAtual = novoEstado
 
 class EstadosMaquina():
     def __init__(self,
