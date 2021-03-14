@@ -30,16 +30,16 @@ socketServidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socketServidor.bind((SERVIDOR_ENDERECO, SERVIDOR_PORTA))
 # permite o servidor aceitar conexões, com no maximo uma conexao na fila
 socketServidor.listen(1)
-print('Ouvindo na porta {}.'.format(SERVIDOR_PORTA))
+print('Ouvindo na porta {}.\n'.format(SERVIDOR_PORTA))
 
 while True:
     # espera por uma conexao
-    print('Esperando conexao...')
+    print('Esperando nova conexao...')
     socketConexao, enderecoCliente = socketServidor.accept()
     print(
         'Conexao aceita com {}.'.format(enderecoCliente),
         'Iniciando troca de mensagens.',
-        'Trocando mensagens',
+        'Trocando mensagens...',
         sep='\n'
     )
     try:
