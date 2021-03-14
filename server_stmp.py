@@ -42,8 +42,11 @@ while True:
         'Trocando mensagens',
         sep='\n'
     )
-    # processa a conexao
-    processaConexao(socketConexao)
+    try:
+        # processa a conexao
+        processaConexao(socketConexao)
+    except BrokenPipeError as erro:
+        print('Conexao com o cliente foi perdida. {}'.format(erro))
     # fecha a conexao
     socketConexao.close()
     print('Servidor encerrou conexao com cliente.\n')
