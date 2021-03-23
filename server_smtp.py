@@ -1,7 +1,6 @@
 import socket
 import sys
 import os
-import string
 from util.processadorProtocolo import processaConexao
 
 # ==============================================================================
