@@ -1,7 +1,6 @@
 import socket
 import sys
 import os
-
 from util.processadorProtocolo import processaConexao
 
 # ==============================================================================
@@ -20,6 +19,28 @@ if __name__ != '__main__':
 # deverá abortar.
 # !SECTION
 
+
+if len(sys.argv) < 2:
+    sys.exit("ERROR: O nome do arquivo não foi passado como argumento!") 
+
+name_arq =  sys.argv[1]
+   
+try:
+    arq = open(name_arq, 'r')
+    users = arq.readlines()
+    users_list = []
+    
+    for user in users:
+        user = user.rstrip('\n')
+        users_list.append(user)
+        users_arq = open(user+".txt", 'w')
+        users_arq.close()    
+    arq.close()
+    
+             
+except FileNotFoundError as e:
+    sys.exit("ERROR: O arquivo não existe!")
+           
 SERVIDOR_ENDERECO = '127.0.0.1'
 SERVIDOR_PORTA = 49152
 # SERVIDOR_PORTA = 25
