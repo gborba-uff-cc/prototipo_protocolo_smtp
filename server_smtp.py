@@ -34,9 +34,9 @@ try:
         user = user.rstrip('\n')
         users_list.append(user)
         users_arq = open(user+".txt", 'w')
-            
+        users_arq.close()    
     arq.close()
-    users_arq.close()  
+    
              
 except FileNotFoundError as e:
     sys.exit("ERROR: O arquivo não existe!")
