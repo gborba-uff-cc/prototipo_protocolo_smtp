@@ -1,5 +1,5 @@
 # NOTE - um cliente basico para interagir com o servidor
-# NOTE - este cliente recebe as boas vindas do servidor stmp, entra em um loop 
+# NOTE - este cliente recebe as boas vindas do servidor smtp, entra em um loop 
 # de envio de mensagem para o servidor e recebimento de resposta, o loop 
 # continua até que o cliente receba a resposta 221 (fim de conexao)
 import socket

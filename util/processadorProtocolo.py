@@ -1,5 +1,5 @@
 def processaConexao(sConexao):
-    NOME_APRESENTACAO = 'stmp.prototipo'
+    NOME_APRESENTACAO = 'smtp.prototipo'
     TAM_BUFFER_RECV = 1024
     mensagemBytes = bytes(())
     mensagem = ''
