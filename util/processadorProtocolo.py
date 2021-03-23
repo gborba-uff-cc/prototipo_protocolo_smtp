@@ -11,7 +11,7 @@ def processaConexao(sConexao):
     idCliente = ''
     emailRemetente = ''
     emailDestinatario = ''
-    # faz que o comando HELO aceito apenas como o primeiro comando
+    # faz que o comando HELO seja aceito apenas como o primeiro comando
     clienteIdentificado = False
     # mantem a ordem para: MAIL FROM: -> RCPT TO: -> DATA
     ordemComando = 0
@@ -57,7 +57,9 @@ def processaConexao(sConexao):
             sConexao.send('354 Enter mail, end with ".". on a line by itself'.encode('UTF8'))
             # SECTION - receber email
             _ = sConexao.recv(TAM_BUFFER_RECV) # STUB
-            # TODO - receber mensagens até receber uma linha com apenas '.' .
+            # NOTE - abrir a caixa de entrada do destinatario (arquivo).
+            # TODO - receber mensagens até receber uma linha com apenas '.'.
+            # NOTE - acrescentar'\n' na mensagem antes de apender ao arquivo.
             # !SECTION
             mensagemRecebida = True
             sConexao.send('250 Message accepted for delivery'.encode('UTF8'))
@@ -65,7 +67,6 @@ def processaConexao(sConexao):
         elif mensagem == 'QUIT' and quantidadeTokens == 1 and clienteIdentificado and mensagemRecebida and ordemComando == 0:
             terminouConexao = True
             sConexao.send('221 {} closing connection'.format(NOME_APRESENTACAO).encode('UTF8'))
-            # NOTE - Podemos fechar o socket aqui, por enquanto fech no loop do servidor
 
         else:
             sConexao.send('500 Syntax error, command unrecognized'.encode('UTF8'))
