@@ -12,6 +12,8 @@ socketCliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socketCliente.connect((servidorNome, servidorPorta))
 
 mensagemBytes = socketCliente.recv(1024)
+mensagem = mensagemBytes.decode('utf8')
+ultima_mensagem = ""
 print('>>> ', mensagemBytes.decode('utf8'))
 while True:
     sentenca = input("Digite algo a ser enviado ao servidor:\n<<< ")
@@ -22,7 +24,20 @@ while True:
     mensagemBytes = socketCliente.recv(1024)
     mensagem = mensagemBytes.decode('utf8')
     print('>>> ', mensagem)
-    if mensagem.startswith('221'):
+    if mensagem.startswith('354'):
+        while True:
+            sentenca = input("Digite algo a ser enviado ao servidor:\n<<< ")
+            # caso queira enviar uma quebra de linha
+            if sentenca == '':
+                sentenca = '\n'
+            elif sentenca == '.':
+                socketCliente.send(sentenca.encode('utf8'))
+                mensagemBytes = socketCliente.recv(1024)
+                mensagem = mensagemBytes.decode('utf8')
+                print('>>> ', mensagem)
+                break
+            socketCliente.send(sentenca.encode('utf8'))
+    elif mensagem.startswith('221'):
         break
 
 socketCliente.close()
