@@ -11,6 +11,7 @@ def processaConexao(sConexao):
     idCliente = ''
     emailRemetente = ''
     emailDestinatario = ''
+    nome_caixa_entrada = ''
     # faz que o comando HELO seja aceito apenas como o primeiro comando
     clienteIdentificado = False
     # mantem a ordem para: MAIL FROM: -> RCPT TO: -> DATA
@@ -56,7 +57,18 @@ def processaConexao(sConexao):
             ordemComando += 1
             sConexao.send('354 Enter mail, end with ".". on a line by itself'.encode('UTF8'))
             # SECTION - receber email
-            _ = sConexao.recv(TAM_BUFFER_RECV) # STUB
+            mensagemBytes = sConexao.recv(TAM_BUFFER_RECV)
+            mensagem = mensagemBytes.decode('UTF8')
+            nome_caixa_entrada = emailDestinatario.split("@")[0]+".txt"
+            #_ = sConexao.recv(TAM_BUFFER_RECV)
+            with open(nome_caixa_entrada, "a") as caixaDeEntrada:
+                while mensagem != ".":
+                    caixaDeEntrada.write(mensagem + "\n")
+                    print("added {}".format(mensagem + "\n"))
+                    mensagemBytes = sConexao.recv(TAM_BUFFER_RECV)
+                    mensagem = mensagemBytes.decode('UTF8')
+                # pegar nome do arquivo que foi criado
+                #dar append junto com \n. Dar append antes ou depois do fim dos inputs? A cada linha vinda do client dar append?
             # NOTE - abrir a caixa de entrada do destinatario (arquivo).
             # TODO - receber mensagens até receber uma linha com apenas '.'.
             # NOTE - acrescentar'\n' na mensagem antes de apender ao arquivo.
