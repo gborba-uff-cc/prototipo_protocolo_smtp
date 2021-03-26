@@ -61,7 +61,7 @@ def processaConexao(sConexao):
             mensagem = mensagemBytes.decode('UTF8')
             nome_caixa_entrada = emailDestinatario.split("@")[0]+".txt"
             #_ = sConexao.recv(TAM_BUFFER_RECV)
-            with open(nome_caixa_entrada, "w") as caixaDeEntrada:
+            with open(nome_caixa_entrada, "a") as caixaDeEntrada:
                 while mensagem != ".":
                     caixaDeEntrada.write(mensagem + "\n")
                     print("added {}".format(mensagem + "\n"))
