@@ -50,7 +50,7 @@ def processaConexao(sConexao):
             # !SECTION
             emailDestinatario = mensagemTokens[2]
             try:
-                arq = open(emailDestinatario + '.txt', 'r')
+                arq = open(emailDestinatario.split("@")[0] + '.txt', 'r')
                 arq.close()
                 ordemComando += 1
                 sConexao.send('250 {} Recipient ok'.format(emailDestinatario).encode('UTF8'))
