@@ -49,9 +49,15 @@ def processaConexao(sConexao):
             # NOTE - a conexão *não deve ser encerrada nesse caso*.
             # NOTE - pular para o proximo email. (ordemComando = 0)
             # !SECTION
-            ordemComando += 1
             emailDestinatario = mensagemTokens[2]
-            sConexao.send('250 {} Recipient ok'.format(emailDestinatario).encode('UTF8'))
+            try:
+                arq = open(emailDestinatario.split("@")[0] + '.txt', 'r')
+                arq.close()
+                ordemComando += 1
+                sConexao.send('250 {} Recipient ok'.format(emailDestinatario).encode('UTF8'))
+            except FileNotFoundError as e:
+                ordemComando = 0
+                sConexao.send('550 Address unknown'.encode('UTF8'))
 
         elif mensagem == 'DATA' and quantidadeTokens == 1 and clienteIdentificado and ordemComando == 2:
             ordemComando += 1
