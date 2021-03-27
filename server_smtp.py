@@ -65,7 +65,7 @@ while True:
     try:
         # processa a conexao
         processaConexao(socketConexao)
-    except BrokenPipeError as erro:
+    except Exception as erro:
         print('Conexao com o cliente foi perdida. {}'.format(erro))
     # fecha a conexao
     socketConexao.close()
