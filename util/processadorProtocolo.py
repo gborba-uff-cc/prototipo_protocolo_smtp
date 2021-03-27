@@ -1,3 +1,29 @@
+def enviaTexto(socket, texto, incluiNovaLinha = True):
+    '''
+    Envia uma string e adiciona uma quebra de linha (\\r\\n) caso incluiNovaLinha seja True.
+    incluiNovaLinha por padrão é True.
+    '''
+    if incluiNovaLinha:
+        return socket.send( (texto+'\r\n').encode('UTF8') )
+    else:
+        return socket.send(texto.encode('UTF8'))
+
+def recebeTexto(socket, removeNovaLinha = False):
+    '''
+    Recebe uma string.
+    '''
+    return socket.recv(1024).decode('UTF8')
+
+def removeQuebraLinha(texto):
+    '''
+    Remove a quebra de linha que existir no fim da string.
+    A quebra de linha pode ser tanto '\\r\\n' ou '\\n'.
+    '''
+    if texto.endswith('\r\n'):
+        return texto.rstrip('\r\n')
+    elif texto.endswith('\n'):
+        return texto.rstrip('\n')
+
 def processaConexao(sConexao):
     NOME_APRESENTACAO = 'smtp.prototipo'
     TAM_BUFFER_RECV = 1024
