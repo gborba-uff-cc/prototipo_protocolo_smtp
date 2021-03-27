@@ -37,18 +37,13 @@ def processaConexao(sConexao):
             sConexao.send('250 Hello {}, pleased to meet you'.format(idCliente).encode('UTF8'))
 
         elif mensagem.startswith('MAIL FROM:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 0:
+            # TODO - Testar se dominio do remetente é o mesmo dominio passado no HELO (idCliente)
             ordemComando += 1
             emailRemetente = mensagemTokens[2]
             sConexao.send('250 {} Sender ok'.format(emailRemetente).encode('UTF8'))
 
         elif mensagem.startswith('RCPT TO:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 1:
-            # SECTION - caso o destinatario nao exista
-            # TODO - verificar se o existe a caixa de entrada do destinatario
-            # NOTE - caso o destinatário especificado não seja um dos usuários 
-            # do sistema, o servidor deverá responder com "550 Address unknown".
-            # NOTE - a conexão *não deve ser encerrada nesse caso*.
-            # NOTE - pular para o proximo email. (ordemComando = 0)
-            # !SECTION
+            # TODO - Testar se dominio do destinatario é o mesmo deste servidor (NOME_APRESENTACAO)
             emailDestinatario = mensagemTokens[2]
             try:
                 arq = open(emailDestinatario.split("@")[0] + '.txt', 'r')
@@ -62,23 +57,17 @@ def processaConexao(sConexao):
         elif mensagem == 'DATA' and quantidadeTokens == 1 and clienteIdentificado and ordemComando == 2:
             ordemComando += 1
             sConexao.send('354 Enter mail, end with ".". on a line by itself'.encode('UTF8'))
-            # SECTION - receber email
             mensagemBytes = sConexao.recv(TAM_BUFFER_RECV)
             mensagem = mensagemBytes.decode('UTF8')
             nome_caixa_entrada = emailDestinatario.split("@")[0]+".txt"
-            #_ = sConexao.recv(TAM_BUFFER_RECV)
             with open(nome_caixa_entrada, "a") as caixaDeEntrada:
                 while mensagem != ".":
+                    # TODO - nao acrescentar '\n' caso a mensagem termine com '\n'
                     caixaDeEntrada.write(mensagem + "\n")
+                    # REVIEW - tirar linha de debug abaixo
                     print("added {}".format(mensagem + "\n"))
                     mensagemBytes = sConexao.recv(TAM_BUFFER_RECV)
                     mensagem = mensagemBytes.decode('UTF8')
-                # pegar nome do arquivo que foi criado
-                #dar append junto com \n. Dar append antes ou depois do fim dos inputs? A cada linha vinda do client dar append?
-            # NOTE - abrir a caixa de entrada do destinatario (arquivo).
-            # TODO - receber mensagens até receber uma linha com apenas '.'.
-            # NOTE - acrescentar'\n' na mensagem antes de apender ao arquivo.
-            # !SECTION
             mensagemRecebida = True
             sConexao.send('250 Message accepted for delivery'.encode('UTF8'))
 
