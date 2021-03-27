@@ -5,7 +5,8 @@
 import socket
 
 servidorNome  = 'localhost'
-servidorPorta = 25
+# servidorPorta = 25
+servidorPorta = 49152
 
 # cria o socket para internet protocolo TCP
 socketCliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
