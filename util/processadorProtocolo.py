@@ -26,13 +26,9 @@ def removeQuebraLinha(texto):
 
 def processaConexao(sConexao):
     NOME_APRESENTACAO = 'smtp.prototipo'
-    TAM_BUFFER_RECV = 1024
-    mensagemBytes = bytes(())
     mensagem = ''
     mensagemTokens = []
     quantidadeTokens = 0
-    comandoRecebido = ''
-    erro = False
     terminouConexao = False
     idCliente = ''
     emailRemetente = ''
@@ -46,13 +42,11 @@ def processaConexao(sConexao):
     mensagemRecebida = False
     # ==========================================================================
     # envia mensagem boas vindas
-    sConexao.send('220 {}'.format(NOME_APRESENTACAO).encode('UTF8'))
+    enviaTexto(sConexao, '220 {}'.format(NOME_APRESENTACAO))
     
     while not terminouConexao:
         # recebe mensagem
-        mensagemBytes = sConexao.recv(TAM_BUFFER_RECV)
-        # decodifica bytes recebidos
-        mensagem = mensagemBytes.decode('UTF8')
+        mensagem = removeQuebraLinha(recebeTexto(sConexao))
         # separa em tokens
         mensagemTokens = mensagem.split()
         quantidadeTokens = len(mensagemTokens)
@@ -60,13 +54,13 @@ def processaConexao(sConexao):
         if mensagem.startswith('HELO') and quantidadeTokens == 2 and not clienteIdentificado:
             clienteIdentificado = True
             idCliente = mensagemTokens[1]
-            sConexao.send('250 Hello {}, pleased to meet you'.format(idCliente).encode('UTF8'))
+            enviaTexto(sConexao, '250 Hello {}, pleased to meet you'.format(idCliente))
 
         elif mensagem.startswith('MAIL FROM:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 0:
             # TODO - Testar se dominio do remetente é o mesmo dominio passado no HELO (idCliente)
             ordemComando += 1
             emailRemetente = mensagemTokens[2]
-            sConexao.send('250 {} Sender ok'.format(emailRemetente).encode('UTF8'))
+            enviaTexto(sConexao, '250 {} Sender ok'.format(emailRemetente))
 
         elif mensagem.startswith('RCPT TO:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 1:
             # TODO - Testar se dominio do destinatario é o mesmo deste servidor (NOME_APRESENTACAO)
@@ -75,33 +69,29 @@ def processaConexao(sConexao):
                 arq = open(emailDestinatario.split("@")[0] + '.txt', 'r')
                 arq.close()
                 ordemComando += 1
-                sConexao.send('250 {} Recipient ok'.format(emailDestinatario).encode('UTF8'))
+                enviaTexto(sConexao, '250 {} Recipient ok'.format(emailDestinatario))
             except FileNotFoundError as e:
                 ordemComando = 0
-                sConexao.send('550 Address unknown'.encode('UTF8'))
+                enviaTexto(sConexao, '550 Address unknown')
 
         elif mensagem == 'DATA' and quantidadeTokens == 1 and clienteIdentificado and ordemComando == 2:
             ordemComando += 1
-            sConexao.send('354 Enter mail, end with ".". on a line by itself'.encode('UTF8'))
-            mensagemBytes = sConexao.recv(TAM_BUFFER_RECV)
-            mensagem = mensagemBytes.decode('UTF8')
+            enviaTexto(sConexao, '354 Enter mail, end with ".". on a line by itself')
+            mensagem = recebeTexto(sConexao)
             nome_caixa_entrada = emailDestinatario.split("@")[0]+".txt"
             with open(nome_caixa_entrada, "a") as caixaDeEntrada:
-                while mensagem != ".":
-                    # TODO - nao acrescentar '\n' caso a mensagem termine com '\n'
-                    caixaDeEntrada.write(mensagem + "\n")
-                    # REVIEW - tirar linha de debug abaixo
-                    print("added {}".format(mensagem + "\n"))
-                    mensagemBytes = sConexao.recv(TAM_BUFFER_RECV)
-                    mensagem = mensagemBytes.decode('UTF8')
+                while removeQuebraLinha(mensagem) != ".":
+                    caixaDeEntrada.write(mensagem)
+                    mensagem = recebeTexto(sConexao)
+                caixaDeEntrada.write('{0:-^80}\r\n'.format('FIM DA MENSAGEM'))
             mensagemRecebida = True
-            sConexao.send('250 Message accepted for delivery'.encode('UTF8'))
+            enviaTexto(sConexao, '250 Message accepted for delivery')
 
         elif mensagem == 'QUIT' and quantidadeTokens == 1 and clienteIdentificado and mensagemRecebida and ordemComando == 0:
             terminouConexao = True
-            sConexao.send('221 {} closing connection'.format(NOME_APRESENTACAO).encode('UTF8'))
+            enviaTexto(sConexao, '221 {} closing connection'.format(NOME_APRESENTACAO))
 
         else:
-            sConexao.send('500 Syntax error, command unrecognized'.encode('UTF8'))
+            enviaTexto(sConexao, '500 Syntax error, command unrecognized')
 
         ordemComando %= 3
