@@ -57,13 +57,11 @@ def processaConexao(sConexao):
             enviaTexto(sConexao, '250 Hello {}, pleased to meet you'.format(idCliente))
 
         elif mensagem.startswith('mail from:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 0:
-            # TODO - Testar se dominio do remetente é o mesmo dominio passado no HELO (idCliente)
             ordemComando += 1
             emailRemetente = mensagemTokens[2]
             enviaTexto(sConexao, '250 {} Sender ok'.format(emailRemetente))
 
         elif mensagem.startswith('rcpt to:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 1:
-            # TODO - Testar se dominio do destinatario é o mesmo deste servidor (NOME_APRESENTACAO)
             emailDestinatario = mensagemTokens[2]
             try:
                 arq = open(emailDestinatario.split("@")[0] + '.txt', 'r')
