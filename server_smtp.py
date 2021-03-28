@@ -41,9 +41,9 @@ try:
 except FileNotFoundError as e:
     sys.exit("ERROR: O arquivo não existe!")
            
-SERVIDOR_ENDERECO = '127.0.0.1'
-# SERVIDOR_PORTA = 25
-SERVIDOR_PORTA = 49152
+SERVIDOR_ENDERECO = 'localhost'
+# SERVIDOR_PORTA    = 25
+SERVIDOR_PORTA    = 49152
 
 # cria socket do servidor
 socketServidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

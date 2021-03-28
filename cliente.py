@@ -5,13 +5,13 @@
 import socket
 from util.processadorProtocolo import (enviaTexto,recebeTexto,removeQuebraLinha)
 
-servidorNome  = 'localhost'
-# servidorPorta = 25
-servidorPorta = 49152
+SERVIDOR_ENDERECO = 'localhost'
+# SERVIDOR_PORTA    = 25
+SERVIDOR_PORTA    = 49152
 
 # cria o socket para internet protocolo TCP
 socketCliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socketCliente.connect((servidorNome, servidorPorta))
+socketCliente.connect((SERVIDOR_ENDERECO, SERVIDOR_PORTA))
 
 mensagem = recebeTexto(socketCliente)
 print('>>> ', mensagem, end='')
