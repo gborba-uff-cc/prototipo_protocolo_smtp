@@ -46,23 +46,23 @@ def processaConexao(sConexao):
     
     while not terminouConexao:
         # recebe mensagem
-        mensagem = removeQuebraLinha(recebeTexto(sConexao))
+        mensagem = removeQuebraLinha(recebeTexto(sConexao)).lower()
         # separa em tokens
         mensagemTokens = mensagem.split()
         quantidadeTokens = len(mensagemTokens)
 
-        if mensagem.startswith('HELO') and quantidadeTokens == 2 and not clienteIdentificado:
+        if mensagem.startswith('helo') and quantidadeTokens == 2 and not clienteIdentificado:
             clienteIdentificado = True
             idCliente = mensagemTokens[1]
             enviaTexto(sConexao, '250 Hello {}, pleased to meet you'.format(idCliente))
 
-        elif mensagem.startswith('MAIL FROM:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 0:
+        elif mensagem.startswith('mail from:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 0:
             # TODO - Testar se dominio do remetente é o mesmo dominio passado no HELO (idCliente)
             ordemComando += 1
             emailRemetente = mensagemTokens[2]
             enviaTexto(sConexao, '250 {} Sender ok'.format(emailRemetente))
 
-        elif mensagem.startswith('RCPT TO:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 1:
+        elif mensagem.startswith('rcpt to:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 1:
             # TODO - Testar se dominio do destinatario é o mesmo deste servidor (NOME_APRESENTACAO)
             emailDestinatario = mensagemTokens[2]
             try:
@@ -74,7 +74,7 @@ def processaConexao(sConexao):
                 ordemComando = 0
                 enviaTexto(sConexao, '550 Address unknown')
 
-        elif mensagem == 'DATA' and quantidadeTokens == 1 and clienteIdentificado and ordemComando == 2:
+        elif mensagem == 'data' and quantidadeTokens == 1 and clienteIdentificado and ordemComando == 2:
             ordemComando += 1
             enviaTexto(sConexao, '354 Enter mail, end with ".". on a line by itself')
             mensagem = recebeTexto(sConexao)
@@ -87,7 +87,7 @@ def processaConexao(sConexao):
             mensagemRecebida = True
             enviaTexto(sConexao, '250 Message accepted for delivery')
 
-        elif mensagem == 'QUIT' and quantidadeTokens == 1 and clienteIdentificado and mensagemRecebida and ordemComando == 0:
+        elif mensagem == 'quit' and quantidadeTokens == 1 and clienteIdentificado and mensagemRecebida and ordemComando == 0:
             terminouConexao = True
             enviaTexto(sConexao, '221 {} closing connection'.format(NOME_APRESENTACAO))
 
