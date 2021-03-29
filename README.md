@@ -124,7 +124,7 @@ e esperará o envio de um comando válido.
 
 ### ***Integrantes do grupo:***
 
-* 
+* Jorge Stief
 
 * 
 
