@@ -5,8 +5,7 @@ def enviaTexto(socket, texto, incluiNovaLinha = True):
     '''
     if incluiNovaLinha:
         return socket.send( (texto+'\r\n').encode('UTF8') )
-    else:
-        return socket.send(texto.encode('UTF8'))
+    return socket.send(texto.encode('UTF8'))
 
 def recebeTexto(socket, removeNovaLinha = False):
     '''
@@ -23,6 +22,7 @@ def removeQuebraLinha(texto):
         return texto.rstrip('\r\n')
     elif texto.endswith('\n'):
         return texto.rstrip('\n')
+    return texto
 
 def processaConexao(sConexao):
     NOME_APRESENTACAO = 'smtp.prototipo'
@@ -46,24 +46,22 @@ def processaConexao(sConexao):
     
     while not terminouConexao:
         # recebe mensagem
-        mensagem = removeQuebraLinha(recebeTexto(sConexao))
+        mensagem = removeQuebraLinha(recebeTexto(sConexao)).lower()
         # separa em tokens
         mensagemTokens = mensagem.split()
         quantidadeTokens = len(mensagemTokens)
 
-        if mensagem.startswith('HELO') and quantidadeTokens == 2 and not clienteIdentificado:
+        if mensagem.startswith('helo') and quantidadeTokens == 2 and not clienteIdentificado:
             clienteIdentificado = True
             idCliente = mensagemTokens[1]
             enviaTexto(sConexao, '250 Hello {}, pleased to meet you'.format(idCliente))
 
-        elif mensagem.startswith('MAIL FROM:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 0:
-            # TODO - Testar se dominio do remetente é o mesmo dominio passado no HELO (idCliente)
+        elif mensagem.startswith('mail from:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 0:
             ordemComando += 1
             emailRemetente = mensagemTokens[2]
             enviaTexto(sConexao, '250 {} Sender ok'.format(emailRemetente))
 
-        elif mensagem.startswith('RCPT TO:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 1:
-            # TODO - Testar se dominio do destinatario é o mesmo deste servidor (NOME_APRESENTACAO)
+        elif mensagem.startswith('rcpt to:') and quantidadeTokens == 3 and clienteIdentificado and ordemComando == 1:
             emailDestinatario = mensagemTokens[2]
             try:
                 arq = open(emailDestinatario.split("@")[0] + '.txt', 'r')
@@ -74,12 +72,13 @@ def processaConexao(sConexao):
                 ordemComando = 0
                 enviaTexto(sConexao, '550 Address unknown')
 
-        elif mensagem == 'DATA' and quantidadeTokens == 1 and clienteIdentificado and ordemComando == 2:
+        elif mensagem == 'data' and quantidadeTokens == 1 and clienteIdentificado and ordemComando == 2:
             ordemComando += 1
             enviaTexto(sConexao, '354 Enter mail, end with ".". on a line by itself')
             mensagem = recebeTexto(sConexao)
             nome_caixa_entrada = emailDestinatario.split("@")[0]+".txt"
             with open(nome_caixa_entrada, "a") as caixaDeEntrada:
+                caixaDeEntrada.write('{0:-<80}\r\n'.format('REMETENTE {} '.format(emailRemetente)))
                 while removeQuebraLinha(mensagem) != ".":
                     caixaDeEntrada.write(mensagem)
                     mensagem = recebeTexto(sConexao)
@@ -87,7 +86,7 @@ def processaConexao(sConexao):
             mensagemRecebida = True
             enviaTexto(sConexao, '250 Message accepted for delivery')
 
-        elif mensagem == 'QUIT' and quantidadeTokens == 1 and clienteIdentificado and mensagemRecebida and ordemComando == 0:
+        elif mensagem == 'quit' and quantidadeTokens == 1 and clienteIdentificado and mensagemRecebida and ordemComando == 0:
             terminouConexao = True
             enviaTexto(sConexao, '221 {} closing connection'.format(NOME_APRESENTACAO))
 
