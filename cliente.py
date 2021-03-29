@@ -24,7 +24,6 @@ while True:
     if mensagem.startswith('354'):
         while True:
             sentenca = input("Digite algo a ser enviado ao servidor:\n<<< ")
-            # caso queira enviar uma quebra de linha
             if removeQuebraLinha(sentenca) == '.':
                 enviaTexto(socketCliente, sentenca)
                 mensagem = recebeTexto(socketCliente)
