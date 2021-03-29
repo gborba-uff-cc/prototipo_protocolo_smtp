@@ -5,8 +5,7 @@ def enviaTexto(socket, texto, incluiNovaLinha = True):
     '''
     if incluiNovaLinha:
         return socket.send( (texto+'\r\n').encode('UTF8') )
-    else:
-        return socket.send(texto.encode('UTF8'))
+    return socket.send(texto.encode('UTF8'))
 
 def recebeTexto(socket, removeNovaLinha = False):
     '''
@@ -23,6 +22,7 @@ def removeQuebraLinha(texto):
         return texto.rstrip('\r\n')
     elif texto.endswith('\n'):
         return texto.rstrip('\n')
+    return texto
 
 def processaConexao(sConexao):
     NOME_APRESENTACAO = 'smtp.prototipo'
@@ -78,6 +78,7 @@ def processaConexao(sConexao):
             mensagem = recebeTexto(sConexao)
             nome_caixa_entrada = emailDestinatario.split("@")[0]+".txt"
             with open(nome_caixa_entrada, "a") as caixaDeEntrada:
+                caixaDeEntrada.write('{0:-<80}\r\n'.format('REMETENTE {} '.format(emailRemetente)))
                 while removeQuebraLinha(mensagem) != ".":
                     caixaDeEntrada.write(mensagem)
                     mensagem = recebeTexto(sConexao)
