@@ -10,15 +10,6 @@ if __name__ != '__main__':
 
 
 # ==============================================================================
-# SECTION - entrada linha de comando
-# TODO - receber como argumento de linha de comando o nome de um arquivo e lê-lo.
-# NOTE - O arquivo conterá a lista de usuários do serviço de e-mail, um por linha.
-# NOTE - verificar se o arquivo com a lista de usuários foi corretamente passado 
-# como argumento. Qualquer erro nesse processo (e.g., arquivo não existe, o 
-# formato não é o esperado) deverá gerar uma mensagem de erro e a execução 
-# deverá abortar.
-# !SECTION
-
 
 if len(sys.argv) < 2:
     sys.exit("ERROR: O nome do arquivo não foi passado como argumento!") 
