@@ -24,7 +24,7 @@ try:
     for user in users:
         user = user.rstrip('\n')
         users_list.append(user)
-        users_arq = open(user+".txt", 'w')
+        users_arq = open(user.lower()+".txt", 'w')
         users_arq.close()    
     arq.close()
     
