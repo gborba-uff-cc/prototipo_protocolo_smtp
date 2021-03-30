@@ -51,6 +51,10 @@ ser modificadas mudando o valor da variável `SERVIDOR_PORTA` no script
 seguindo uma ordem específica. Sendo essa ordem: helo, mail from, rcpt to, data
 e quit.
 
+* Este servidor SMTP cria as caixas de entrada utilizando os nomes fornecidos no
+arquivo passado como argumento; observe que todos os nomes serão lidos com os
+caracteres minúsculos. Exemplo: `JohnDoe` será interpretado como `johndoe`.
+
 * Este servidor SMTP não distingue comandos com caracteres maúisculos de
 minúsculos, portanto: `MAIL FROM: FOO@EXAMPLE`, `MAIL FROM: foo@example` e
 `mail from: foo@example` são reconhecidos como o mesmo comando.
@@ -130,6 +134,6 @@ e esperará o envio de um comando válido.
 
 * Vitor Rocha
 
-* 
+* Gabriel Borba
 
 * Matheus Costa Maia Perrut
