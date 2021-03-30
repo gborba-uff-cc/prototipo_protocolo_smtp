@@ -126,7 +126,7 @@ e esperará o envio de um comando válido.
 
 * Jorge Stief
 
-* 
+* Ronald Maymone
 
 * 
 
