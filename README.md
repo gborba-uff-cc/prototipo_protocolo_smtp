@@ -128,7 +128,7 @@ e esperará o envio de um comando válido.
 
 * Ronald Maymone
 
-* 
+* Vitor Rocha
 
 * 
 
