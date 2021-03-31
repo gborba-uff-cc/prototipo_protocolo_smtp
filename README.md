@@ -7,7 +7,8 @@ utilizando sockets.
 
 ## Execução
 
-* O script do servidor foi escrito utilizando pyhton3.
+* Acesse a pasta raiz do projeto e execute o script server_smtp.py com um
+interpretador python3.
 
 * Ao executar o script python do servidor, é preciso passar o nome de um arquivo
 que contem uma lista de nomes de usuário (caixas de entrada). Exemplo:
@@ -70,7 +71,7 @@ direcionadas para a mesma caixa de entrada `johndoe.txt`.
 uma mensagem ter sido enviada.
 
 * Para esse servidor receber várias mensagens em uma única conexao, o cliente
-precisa seguir a ordem dos comandos até antes do quit, e onde anteriormente
+precisa seguir a ordem dos comandos até antes do quit e, onde anteriormente
 seria enviado o quit, o cliente deve enviar o comando mail from e seguir a ordem
 dos comandos.
 
@@ -78,7 +79,10 @@ dos comandos.
 esteja da maneira especificada no caso de uso, o servidor responderá com o erro
 "500 Syntax error, command unrecognized".
 Por exemplo, cliente envia: `helo`, o servidor neste caso respondera com o erro
-e esperará o envio de um comando válido.
+e esperará o envio do comando válido neste caso por exemplo `helo teste`.
+Cliente envia o comando `mail from: johndoe` logo após outro mail from, neste
+caso o servidor responderá com a mensagem de erro e esperará receber o comando
+rcpt to, por exemplo: `rcpt to: babydoe`.
 
 ## Caso de uso
 
